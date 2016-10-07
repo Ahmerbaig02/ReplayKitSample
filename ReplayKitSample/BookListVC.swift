@@ -100,7 +100,7 @@ class BookListVC: UIViewController {
   }
   
   
-  func startRecordingWithSender(sender: UIButton?) {
+  private func startRecordingWithSender(sender: UIButton?) {
     
     screenRecorder?.isMicrophoneEnabled = true
     
@@ -135,7 +135,7 @@ class BookListVC: UIViewController {
   }
   
   
-  func stopRecordingWithSender(sender: UIButton?) {
+  private func stopRecordingWithSender(sender: UIButton?) {
     
     sender?.isEnabled = false
     
@@ -176,8 +176,8 @@ class BookListVC: UIViewController {
     }
   }
   
-  func showErrorAlertWithMesage(message: String) {
-    
+  private func showErrorAlertWithMesage(message: String) {
+
       let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Camera Capture"), message:NSLocalizedString("This app doesn't have permission to use the camera. Please change the privacy settings", comment: "Camera Capture"), preferredStyle: UIAlertControllerStyle.alert)
       
       let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)

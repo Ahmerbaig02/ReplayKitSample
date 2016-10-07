@@ -104,34 +104,40 @@ class BookListVC: UIViewController {
     
     screenRecorder?.isMicrophoneEnabled = true
     
-    recordButtonView?.layer.cornerRadius = 0.0
-    sender?.isSelected = true
-
+    sender?.isEnabled = false
+    
     screenRecorder?.startRecording(handler: {[weak self] (error) in
       
       DispatchQueue.main.async {
         
         guard error == nil else {
           
-          self?.recordButtonView?.layer.cornerRadius = 0.0
-          sender?.isSelected = true
+          self?.showErrorAlertWithMesage(message: "Sorry!! Your recording couldn't be started. Please try again.")
+          self?.recordButtonView?.layer.cornerRadius = (self?.recordButtonView)!.bounds.size.width/2.0
+          sender?.isSelected = false
+          sender?.isEnabled = true
           return
         }
         
         self?.recordButtonView?.layer.cornerRadius = 0.0
         sender?.isSelected = true
+        sender?.isEnabled = true
+
       }
       
     })
     
+    if screenRecorder?.isRecording == true {
+      recordButtonView?.layer.cornerRadius = 0.0
+      sender?.isSelected = true
+    }
+
   }
   
   
   func stopRecordingWithSender(sender: UIButton?) {
     
-    recordButtonView?.layer.cornerRadius = recordButtonView!.bounds.size.width/2.0
-    
-    sender?.isSelected = false
+    sender?.isEnabled = false
     
     screenRecorder?.stopRecording(handler: {[weak self] (previewViewController, error) in
       
@@ -139,8 +145,10 @@ class BookListVC: UIViewController {
         
         guard error == nil else {
           
+          self?.showErrorAlertWithMesage(message: "Sorry!! Your recording couldn't be stopped. Please try again.")
           self?.recordButtonView?.layer.cornerRadius = 0.0
           sender?.isSelected = true
+          sender?.isEnabled = true
           
           return
         }
@@ -152,11 +160,31 @@ class BookListVC: UIViewController {
           self?.window?.isHidden = true
           
         }
+        
+        self?.recordButtonView?.layer.cornerRadius = (self?.recordButtonView)!.bounds.size.width/2.0
+        sender?.isSelected = false
+        sender?.isEnabled = true
+        
       }
       
       })
+    
+    if screenRecorder?.isRecording == false {
+      recordButtonView?.layer.cornerRadius = recordButtonView!.bounds.size.width/2.0
+      sender?.isSelected = false
+      
+    }
   }
   
+  func showErrorAlertWithMesage(message: String) {
+    
+      let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Camera Capture"), message:NSLocalizedString("This app doesn't have permission to use the camera. Please change the privacy settings", comment: "Camera Capture"), preferredStyle: UIAlertControllerStyle.alert)
+      
+      let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+      alertController.addAction(okAction)
+      present(alertController, animated: true, completion: nil)
+  }
+
 }
 
 
